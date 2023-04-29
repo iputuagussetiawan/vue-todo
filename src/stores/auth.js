@@ -12,7 +12,6 @@ export const useAuthStore= defineStore("authStore",()=>{
         } catch (error) {
             user.value=null
         }
-       
     }
     const handleLogin=async(credentials)=>{
         await csrfCookie()
