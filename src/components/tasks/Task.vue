@@ -6,7 +6,12 @@
                 title="Double click the text to edit or remove"
                 @dblclick="$event=>isEdit=true">
                 <div class="relative" v-if="isEdit">
-                    <input class="editable-task" type="text" @keyup.esc="$event=>isEdit=false" v-focus/>
+                    <input 
+                        class="editable-task" type="text" 
+                        @keyup.esc="$event=>isEdit=false" 
+                        @keyup.enter="updateTask"
+                        v-focus
+                    />
                 </div>
                 <span v-else>{{task.name}}</span>
             </div>
@@ -23,10 +28,17 @@
     const props=defineProps({
         task:Object
     })
+    const emit=defineEmits(['updated'])
     const isEdit=ref(false)
     const completedClass=computed(()=>props.task.is_completed ?"completed":"")
 
     const vFocus={
         mounted:(el)=>el.focus()
+    }
+
+    const updateTask=event=>{
+        const updatedTask={...props.task,name:event.target.value}
+        isEdit.value=false
+        emit('updated',updatedTask)
     }
 </script>
