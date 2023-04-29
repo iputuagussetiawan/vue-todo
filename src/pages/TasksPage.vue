@@ -41,27 +41,13 @@
     import Tasks from "../components/tasks/Tasks.vue"
     import NewTask from "../components/tasks/NewTask.vue"
     const store=useTaskStore()
-    // store.task.is_completed=true
-    // store.task.name="First task updated"
-    // store.$patch({
-    //     task:{
-    //         name:"First Task Update Using $patch",
-    //         is_completed:true
-    //     }
-    // })
-
     const {completedTasks, uncompletedTasks}=storeToRefs(store)
     const {fetchAllTask}=store
     const tasks=ref([])
     onMounted(async()=>{
        
         await fetchAllTask()
-        // console.log(completed.value)
-        // console.log(uncompleted.value)
     })
-
-    // const uncompletedTasks=computed(()=>tasks.value.filter(task=>!task.is_completed))
-    // const completedTasks=computed(()=>tasks.value.filter(task=>task.is_completed))
     const showToggleCompletedBtn=computed(
         ()=>uncompletedTasks.value.length>0&&completedTasks.value.length>0
     )
