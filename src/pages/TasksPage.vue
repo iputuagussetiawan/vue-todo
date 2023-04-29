@@ -9,10 +9,17 @@
                             placeholder="+ Add new task. Press enter to save." />
                     </div>
                     <!-- List of uncompleted tasks -->
-                    <Tasks :tasks="uncompletedTask"/>
+                    <Tasks :tasks="uncompletedTasks"/>
                     <!-- show toggle button -->
+                    <div class="text-center my-3" v-show="showToggleCompletedBtn">
+                        <button class="btn btn-sm btn-secondary" 
+                            @click="$event=>showCompletedTasks=!showCompletedTasks">
+                            <span v-if="!showCompletedTasks">Show Completed</span>
+                            <span v-else>Hide Completed</span>
+                        </button>
+                    </div>
                     <!-- list of completed task -->
-                    <Tasks :tasks="completedTask"/>
+                    <Tasks :tasks="completedTasks" :show="completedTasksIsVisible && showCompletedTasks"/>
                 </div>
             </div>
         </div>
@@ -21,7 +28,7 @@
 
 <script setup>
     import {computed, onMounted,ref} from "vue";
-    import {allTasks} from "../http/task-api"
+    import {allTasks, completeTask} from "../http/task-api"
     import Tasks from "../components/tasks/Tasks.vue"
     const tasks=ref([])
     onMounted(async()=>{
@@ -29,6 +36,13 @@
         tasks.value=data.data
     })
 
-    const uncompletedTask=computed(()=>tasks.value.filter(task=>!task.is_completed))
-    const completedTask=computed(()=>tasks.value.filter(task=>task.is_completed))
+    const uncompletedTasks=computed(()=>tasks.value.filter(task=>!task.is_completed))
+    const completedTasks=computed(()=>tasks.value.filter(task=>task.is_completed))
+    const showToggleCompletedBtn=computed(
+        ()=>uncompletedTasks.value.length>0&&completedTasks.value.length>0
+    )
+    const completedTasksIsVisible=computed(
+        ()=>uncompletedTasks.value.length===0 || completedTasks.value.length>0
+    )
+    const showCompletedTasks=ref(false)
 </script>
