@@ -9,9 +9,12 @@ const router= createRouter({
 
 
 router.beforeEach((to,from)=>{
-    if(to.path==='/tasks'){
+    if(to.meta.auth){
         return{
-            name:"login"
+            name:"login",
+            query:{
+                redirect:to.fullPath
+            }
         }
     }
 })
